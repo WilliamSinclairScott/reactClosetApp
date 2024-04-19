@@ -1,22 +1,21 @@
 //packges import
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { useContext, useEffect, createContext} from 'react';
+import { useContext, useEffect} from 'react';
 
 import './App.css';
 
 //import context
-import { AuthContextComponent } from './context/auth'
+import AuthContextComponent, {AuthContext}  from './context/auth'
 
 //import pages
-import { Auth } from './pages/Auth'
-import { Search } from './pages/Search'
-import { Closet } from './pages/Closet';
+import Auth  from   './pages/Auth.jsx'
+import Search from './pages/Search'
+import Closet from './pages/Closet';
 
 //import components
-import { Nav } from './components/Nav'
+import Nav from './components/Nav'
 
-//initialize context
-const AuthContext = createContext(null)
+
 
 function App() {
   return (
@@ -33,10 +32,10 @@ const AppContent = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const protectedRoutes = ['/post', '/updatepost'];
+    const protectedRoutes = ['/search', '/'];
 
     if (protectedRoutes.includes(location.pathname) && !isLoggedIn) {
-      navigate('/auth/signin', { replace: true });
+      navigate('/auth', { replace: true });
     }
   }, [isLoggedIn, navigate, location]);
 

@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+//initialize context
+export const AuthContext = createContext(null)
 
 export default function AuthContextComponent({ children }) {
 
