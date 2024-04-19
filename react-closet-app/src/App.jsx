@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+//packges import
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { useContext, useEffect, createContext} from 'react';
+
+import './App.css';
+
+//import context
+import { AuthContextComponent } from './context/auth'
+
+//import pages
+import { Auth } from './pages/Auth'
+import { Search } from './pages/Search'
+import { Closet } from './pages/Closet';
+
+//import components
+import { Nav } from './components/Nav'
+
+//initialize context
+const AuthContext = createContext(null)
 
 function App() {
-  const [count, setCount] = useState(0)
+  return (
+    <AuthContextComponent>
+      {/* Use the AuthContextComponent to wrap the app */}
+      <AppContent />
+    </AuthContextComponent>
+  )
+}
+
+const AppContent = () => {
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const protectedRoutes = ['/post', '/updatepost'];
+
+    if (protectedRoutes.includes(location.pathname) && !isLoggedIn) {
+      navigate('/auth/signin', { replace: true });
+    }
+  }, [isLoggedIn, navigate, location]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+     
+      <Nav className="block" isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      
+      <Routes>
+        {/* unprotected, redirect to /auth */}
+        <Route path="/auth" element={<Auth />} /> 
+
+        {/* protected, redirect to /auth */}
+        <Route path="/" element={isLoggedIn ? <Closet /> : <Auth/>} />
+        <Route path="/search" element={isLoggedIn ? <Search /> : <Auth/>} />
+
+      </Routes>
     </>
   )
 }
 
-export default App
+export default App;
