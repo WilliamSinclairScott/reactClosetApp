@@ -1,16 +1,17 @@
-import { login } from '../services/api/auth';
+import { signup } from '../services/api/auth';
 
-const LogIn = () => {
+const SignUp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
-    await login(event.target.name.value, event.target.password.value);
-    //console.log(response)
+    const response = await signup(event.target.name.value, event.target.password.value)
+    console.log(response)
+    
   };
 
   return (
     <div>
-      <h2>Log In</h2>
+      <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">name:</label>
@@ -20,10 +21,11 @@ const LogIn = () => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" />
         </div>
-        <button type="submit">Log In</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
 };
 
-export default LogIn;
+
+export default SignUp;

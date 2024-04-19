@@ -1,22 +1,25 @@
 import { useState } from 'react';
-import SignIn from '../components/SignIn';
+import SignUp from '../components/SignUp';
 import Login from '../components/LogIn';
 
-const Auth = () => {
-  const [isSignIn, setIsSignIn] = useState(true);
-
+const Auth = ({ isLoggedIn }) => {
+  const [isSignUp, setIsSignUp] = useState(true);
   const toggleComponent = () => {
-    setIsSignIn(!isSignIn);
+    setIsSignUp(!isSignUp);
   };
 
-  return (
+  return (!isLoggedIn ? (
     <div>
       <button onClick={toggleComponent}>
-        {isSignIn ? 'Switch to Login' : 'Switch to SignIn'}
+        {isSignUp ? 'Switch to Login' : 'Switch to SignUp'}
       </button>
-      {isSignIn ? <SignIn /> : <Login />}
+      {isSignUp ? <SignUp /> : <Login />}
     </div>
-  );
-};
+    ) : (
+    <div>
+      <h1>Log Out</h1>
+    </div>
+    ))
+  }
 
 export default Auth;

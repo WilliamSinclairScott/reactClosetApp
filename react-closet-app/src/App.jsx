@@ -32,8 +32,9 @@ const AppContent = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const protectedRoutes = ['/search', '/'];
-
+    const protectedRoutes = ['/search', '/home'];
+    console.log(isLoggedIn)
+    console.log(location.pathname)
     if (protectedRoutes.includes(location.pathname) && !isLoggedIn) {
       navigate('/auth', { replace: true });
     }
@@ -46,10 +47,10 @@ const AppContent = () => {
       
       <Routes>
         {/* unprotected, redirect to /auth */}
-        <Route path="/auth" element={<Auth />} /> 
+        <Route path="/auth" isLoggedIn={isLoggedIn} element={<Auth />} /> 
 
         {/* protected, redirect to /auth */}
-        <Route path="/" element={isLoggedIn ? <Closet /> : <Auth/>} />
+        <Route path="/home" element={isLoggedIn ? <Closet /> : <Auth/>} />
         <Route path="/search" element={isLoggedIn ? <Search /> : <Auth/>} />
 
       </Routes>

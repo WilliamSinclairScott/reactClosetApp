@@ -4,7 +4,7 @@ const LOCALSTORAGE_KEY='token'
 const api = axios.create({
   //baseURL: /* DEPLOYED SERVER GOES HERE */
   baseURL: 'http://localhost:7777',
-
+  withCredentials: true
 })
 api.interceptors.request.use(config => {
     const token = localStorage.getItem(LOCALSTORAGE_KEY)
