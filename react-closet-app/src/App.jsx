@@ -1,61 +1,39 @@
-//packges import
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { useContext, useEffect} from 'react';
+import { useContext, useEffect } from 'react'
+import './App.css'
+import { Route, Routes, useLocation, useNavigate, } from 'react-router-dom'
 
-import './App.css';
-
-//import context
-import AuthContextComponent, {AuthContext}  from './context/auth'
-
-//import pages
-import Auth  from   './pages/Auth.jsx'
+import Closet from './pages/Closet'
 import Search from './pages/Search'
-import Closet from './pages/Closet';
-
-//import components
+import Auth from './pages/Auth'
 import Nav from './components/Nav'
+import { AuthContext } from './context/auth'
 
 
+const protectedRoutes = ['/', `/search`]
 
 function App() {
-  return (
-    <AuthContextComponent>
-      {/* Use the AuthContextComponent to wrap the app */}
-      <AppContent />
-    </AuthContextComponent>
-  )
-}
+  const { loggedIn, user } = useContext(AuthContext)
 
-const AppContent = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const protectedRoutes = ['/search', '/home'];
-    console.log(isLoggedIn)
-    console.log(location.pathname)
-    if (protectedRoutes.includes(location.pathname) && !isLoggedIn) {
-      navigate('/auth', { replace: true });
+    if (protectedRoutes.includes(location.pathname) && !loggedIn) {
+      navigate('/login', { replace: true })
     }
-  }, [isLoggedIn, navigate, location]);
-
+  }, [loggedIn, navigate, location])
+  const curr = JSON.parse(localStorage.getItem('user'))
+  console.log('App:', loggedIn, curr.name)
   return (
     <>
-     
-      <Nav className="block" isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      
+      {/* <Nav loggedIn={loggedIn} userName={user}/> */}
       <Routes>
-        {/* unprotected, redirect to /auth */}
-        <Route path="/auth" isLoggedIn={isLoggedIn} element={<Auth />} /> 
-
-        {/* protected, redirect to /auth */}
-        <Route path="/home" element={isLoggedIn ? <Closet /> : <Auth/>} />
-        <Route path="/search" element={isLoggedIn ? <Search /> : <Auth/>} />
-
+        <Route path="/" element ={<Closet />} />
+        <Route path="/search" element={ <Search />} />
+        <Route path="/auth" element={ < Auth /> } />
       </Routes>
     </>
   )
 }
 
-export default App;
+export default App

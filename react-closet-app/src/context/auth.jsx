@@ -1,57 +1,39 @@
-import { useEffect, useState, createContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { createContext, useEffect, useState } from "react";
+import { login, logout } from "../services/api/auth";
 
-//initialize context
 export const AuthContext = createContext(null)
 
 export default function AuthContextComponent({ children }) {
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [user, setUser] = useState(null)
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [user, setUser] = useState({})
-  const navigate = useNavigate() // Use the useNavigate hook
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem('loggedIn');
-    setIsLoggedIn(loggedIn === 'true');
-  
-    // Retrieve the user object from localStorage
-    const user = localStorage.getItem('user');
-    if (user) {
-      setUser(JSON.parse(user));
+  function refreshFromLocalStorage() {
+    console.log('Refreshing from local storage...')
+    if (!localStorage.getItem('loggedIn')) {
+      setLoggedIn(false)
     }
-  }, [])
+    setLoggedIn(localStorage.getItem('loggedIn'))
 
-  const signOut = () => {
-    // Clear user data
-    setUser({})
-  
-    // Set isLoggedIn to false
-    setIsLoggedIn(false)
-  
-    // Remove the token and loggedIn status from localStorage
-    localStorage.removeItem('token')
-    localStorage.removeItem('loggedIn')
-  
-    // Remove the user object from localStorage
-    localStorage.removeItem('user')
-  
-    // Redirect the user to the sign-in page or any other desired location
-    navigate('/auth/signin')
+    if (!localStorage.getItem('user')) {
+      setUser(null)
+    }
+    setUser(localStorage.getItem('user'))
   }
 
-  const signIn = (user) => {
-    // Set the user object in the state
-    setUser(user);
-    // Store the user object in localStorage
-    localStorage.setItem('user', JSON.stringify(user));
-    // Set the isLoggedIn state to true
-    navigate('/')
+  useEffect(refreshFromLocalStorage, [])
+  
+  async function signIn(name) {
+    await login(name)
+    refreshFromLocalStorage()
+  }
+
+  async function signOut(name) {
+    await logout(name)
+    refreshFromLocalStorage()
   }
 
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, user, setUser, signIn, signOut }}
-    >
+    <AuthContext.Provider value={{ loggedIn, user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )
