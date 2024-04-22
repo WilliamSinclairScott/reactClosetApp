@@ -2,23 +2,13 @@ import api from './apiConfig'
 
 export async function login(name, password) {
   try {
-    // Make a POST request to the /auth/login endpoint to login the user
-    const response = await api.post('/auth/login', { name, password });
-
-    console.log("login response:", response)
-
-    // Store the token in localStorage
-    localStorage.setItem('Token', response)
-    localStorage.setItem('loggedIn', 'true');
-
-    // Store the user data in localStorage, if it's included in the response
-    if (response.data.user) {
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-    }
-    return response.data;
+      const response = await api.post('/auth/login', { name, password });
+      const { user } = response.data;
+      localStorage.setItem('currentUserItems', JSON.stringify(user.closetItems));
+      localStorage.setItem('curretUserAssociatedTags', JSON.stringify(user.associatedTags));
+      localStorage.setItem('loggedIn', 'true');
   } catch (error) {
-    console.error("login Error:", error);
-    return error
+      console.error("login Error:", error);
   }
 }
 
@@ -38,7 +28,7 @@ export async function signup(name, password) {
 export async function logout() {
   try {
     // Make a POST request to the /auth/logout endpoint to logout the user
-    const response = await api.post('/auth/logout');
+    const response = await api.get('/auth/logout');
 
     // Remove the token and user data from localStorage
     localStorage.removeItem('Token');

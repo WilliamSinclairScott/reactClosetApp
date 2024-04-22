@@ -18,15 +18,15 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    //!!Auth redirect prob not working. come back to this
     if (protectedRoutes.includes(location.pathname) && !loggedIn) {
-      navigate('/login', { replace: true })
+      navigate('/auth', { replace: true })
     }
   }, [loggedIn, navigate, location])
-  const curr = JSON.parse(localStorage.getItem('user'))
-  console.log('App:', loggedIn, curr.name)
+
   return (
     <>
-      {/* <Nav loggedIn={loggedIn} userName={user}/> */}
+      <Nav isLoggedIn={loggedIn} userName={user}/>
       <Routes>
         <Route path="/" element ={<Closet />} />
         <Route path="/search" element={ <Search />} />
