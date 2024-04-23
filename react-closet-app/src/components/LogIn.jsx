@@ -1,11 +1,13 @@
-import { login } from '../services/api/auth';
 
+import { useContext } from 'react';
+import { AuthContext } from '../context/auth';
 const LogIn = () => {
+  const { signIn } = useContext(AuthContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
-    await login(event.target.name.value, event.target.password.value);
-    //console.log(response)
+    await signIn(event.target.name.value, event.target.password.value);
+    
   };
 
   return (

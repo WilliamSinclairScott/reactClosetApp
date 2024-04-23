@@ -1,20 +1,30 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '../context/auth';
+import { useNavigate } from 'react-router-dom';
 import SignUp from '../components/SignUp';
 import Login from '../components/LogIn';
 
-const Auth = ({ isLoggedIn }) => {
+const Auth = () => {
+  const {isLoggedIn} = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState(true);
+  const navigate = useNavigate();
+
   const toggleComponent = () => {
     setIsSignUp(!isSignUp);
   };
 
+  useEffect(() => {
+    if(isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn, navigate])
   return (!isLoggedIn ? (
     <div>
       <button onClick={toggleComponent}>
-        {isSignUp ? 'Switch to Login' : 'Switch to SignUp'}
+        {isSignUp ? 'Switch to SignUp' : 'Switch to Login'}
       </button>
-      {isSignUp ? <SignUp /> : <Login />}
+      {isSignUp ? <Login /> : <SignUp />}
     </div>
     ) : (
     <div>

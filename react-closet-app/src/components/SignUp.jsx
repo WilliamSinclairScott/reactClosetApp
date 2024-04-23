@@ -2,11 +2,10 @@ import { signup } from '../services/api/auth';
 
 const SignUp = () => {
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    // Handle form submission logic here
-    const response = await signup(event.target.name.value, event.target.password.value)
-    console.log(response)
+    await signup(event.target.name.value, event.target.password.value)
+    //redirect to login page
     
+
   };
 
   return (

@@ -1,10 +1,11 @@
+// 
 // import React from 'react';
 
-const Tag = () => {
+const Tag = ({ name, _id}) => {
   return (
     <div>
       {/* Your component code here */}
-      Tag
+      Tag {_id} with name {name}
     </div>
   );
 };

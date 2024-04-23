@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import './App.css'
+//import './App.css'
 import { Route, Routes, useLocation, useNavigate, } from 'react-router-dom'
 
 import Closet from './pages/Closet'
@@ -12,21 +12,22 @@ import { AuthContext } from './context/auth'
 const protectedRoutes = ['/', `/search`]
 
 function App() {
-  const { loggedIn, user } = useContext(AuthContext)
+  const { loggedIn } = useContext(AuthContext)
 
+  const logIn = localStorage.getItem('loggedIn')
   const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
     //!!Auth redirect prob not working. come back to this
-    if (protectedRoutes.includes(location.pathname) && !loggedIn) {
+    if (protectedRoutes.includes(location.pathname) && !(loggedIn || logIn)) {
       navigate('/auth', { replace: true })
     }
-  }, [loggedIn, navigate, location])
+  }, [loggedIn,logIn, navigate, location])
 
   return (
     <>
-      <Nav isLoggedIn={loggedIn} userName={user}/>
+      <Nav />
       <Routes>
         <Route path="/" element ={<Closet />} />
         <Route path="/search" element={ <Search />} />
