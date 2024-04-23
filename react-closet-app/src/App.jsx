@@ -29,8 +29,16 @@ function App() {
     <>
       <Nav />
       <Routes>
-        <Route path="/" element ={<Closet />} />
-        <Route path="/search" element={ <Search />} />
+        {
+          //conditionally render if loggedIn
+          (loggedIn || logIn) &&
+          <>
+            <Route path="/" element ={<Closet />} />
+            <Route path="/search" element={ <Search />} />
+          </>
+        }
+        
+        
         <Route path="/auth" element={ < Auth /> } />
       </Routes>
     </>

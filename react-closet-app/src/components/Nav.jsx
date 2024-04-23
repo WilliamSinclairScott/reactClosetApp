@@ -4,9 +4,13 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/auth';
 
 const Nav = () => {
+  
+  
   const { signOut } = useContext(AuthContext);
   const loggedIn = localStorage.getItem("loggedIn")
   const username = localStorage.getItem("username")
+  
+  
   return (
     <nav>
       <p>{username ? username : "Please Sign In"} </p>
